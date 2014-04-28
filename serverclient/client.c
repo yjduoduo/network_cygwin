@@ -10,6 +10,7 @@
 #include <netinet/in.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
+#include <fcntl.h>
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +19,7 @@ int main(int argc, char *argv[])
         struct sockaddr_in server_addr;
         struct hostent *host;
         int portnumber,nbytes;
-		printf("sizeof str:%d\n",strlen("Hello! Are You Fine?"));
+//		printf("sizeof str:%d\n",strlen("Hello! Are You Fine?"));
 
         if(argc!=3)
         {
@@ -48,6 +49,12 @@ int main(int argc, char *argv[])
                 exit(1);
         }
 		
+		
+		int flags = fcntl(sockfd,F_GETFL,0);//获取建立的sockfd的当前状态（非阻塞）  
+		fcntl(sockfd,F_SETFL,flags|O_NONBLOCK);//将当前sockfd设置为非阻塞  
+		fcntl(sockfd,F_SETFL,0);//将当前sockfd设置为阻塞
+		printf("flag:%d\n",flags);
+
 		printf("sockfd:%d\n",sockfd);
 		
         /* 客户程序填充服务端的资料       */
@@ -61,12 +68,17 @@ int main(int argc, char *argv[])
 		printf("server:sin_port:%d\n",server_addr.sin_port);
 		printf("server:sin_addr:%s\n",inet_ntoa(server_addr.sin_addr));
 		
+		
+
         /* 客户程序发起连接请求         */ 
         if(connect(sockfd,(struct sockaddr *)(&server_addr),sizeof(struct sockaddr))==-1)
         {
-                fprintf(stderr,"Connect Error:%s\a\n",strerror(errno));
+                fprintf(stderr,"Connect Error:%s!!!\n",strerror(errno));
                 exit(1);
         }
+		//winsock
+		//unsigned long ul = 1;
+		//ioctl( sockfd, FIONBIO, &ul );  //设置为非阻塞模式 
 
         /* 连接成功了           */
         if((nbytes=read(sockfd,buffer,1024))==-1)
