@@ -1,2 +1,5 @@
-uint8    time timeval
-uint32  date  dateval
+uint8     time timeval
+uint32    date  dateval
+uint8     Flag195 Flag195val
+uint8     FirstAlarm  FirstAlarm_Flag
+char      is_init_func     is_init

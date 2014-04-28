@@ -1,4 +1,5 @@
 #include "time_flag.h"
+uint8 timeval = 0;
 void setflag_time(void)
 {
     timeval = 1;

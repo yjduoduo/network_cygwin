@@ -28,6 +28,7 @@ do
 	#######################源文件list############################################
 	#include header
 	echo -e \#include \"$filename.h\" >$complexdirname.c
+	echo -e $type" "$var" = 0;"           >>$complexdirname.c
 	#add set function 
 	echo void setflag_$func\(void\) >>$complexdirname.c
 	echo {                          >>$complexdirname.c

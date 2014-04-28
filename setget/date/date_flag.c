@@ -1,4 +1,5 @@
 #include "date_flag.h"
+uint32 dateval = 0;
 void setflag_date(void)
 {
     dateval = 1;
