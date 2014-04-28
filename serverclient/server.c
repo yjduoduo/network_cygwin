@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
                 fprintf(stderr,"Usage:%s portnumber\a\n",argv[0]);
                 exit(1);
         }
+		printf("portnumber:%d\n",portnumber);
 
         /* 服务器端开始建立socket描述符 */
         if((sockfd=socket(AF_INET,SOCK_STREAM,0))==-1)  
@@ -36,12 +37,17 @@ int main(int argc, char *argv[])
                 fprintf(stderr,"Socket error:%s\n\a",strerror(errno));
                 exit(1);
         }
+		printf("sockfd:%d\n",sockfd);
 
         /* 服务器端填充 sockaddr结构  */ 
         bzero(&server_addr,sizeof(struct sockaddr_in));
         server_addr.sin_family=AF_INET;
         server_addr.sin_addr.s_addr=htonl(INADDR_ANY);
         server_addr.sin_port=htons(portnumber);
+		printf("info list=======================\n");
+		printf("server:sin_family:%d\n",server_addr.sin_family);
+		printf("server:s_addr:%d\n",server_addr.sin_addr.s_addr);
+		printf("server:port:%d\n",server_addr.sin_port);
 
         /* 捆绑sockfd描述符  */ 
         if(bind(sockfd,(struct sockaddr *)(&server_addr),sizeof(struct sockaddr))==-1)
@@ -61,12 +67,14 @@ int main(int argc, char *argv[])
         {
                 /* 服务器阻塞,直到客户程序建立连接  */
                 sin_size=sizeof(struct sockaddr_in);
+				printf("sin_size:%d\n",sin_size);
                 if((new_fd=accept(sockfd,(struct sockaddr *)(&client_addr),&sin_size))==-1)
                 {
                         fprintf(stderr,"Accept error:%s\n\a",strerror(errno));
                         exit(1);
                 }
-
+				printf("new fd:%d\n",new_fd);
+			
                 fprintf(stderr,"Server get connection from %s\n",
                 inet_ntoa(client_addr.sin_addr));
                 if(write(new_fd,hello,strlen(hello))==-1)
